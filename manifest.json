@@ -1,18 +1,19 @@
 {
-  "vendor": "CHANGE_ME",
-  "name": "CHANGE_ME",
+  "vendor": "vtex",
+  "name": "sponsored-products",
   "version": "0.0.0",
-  "title": "CHANGE_ME",
-  "description": "CHANGE_ME",
+  "title": "VTEX Sponsored Products",
+  "description": "Frontend apps that configure VTEX Ads in your storefront.",
   "builders": {
     "react": "3.x",
     "messages": "1.x",
-    "docs": "0.x"
+    "docs": "0.x",
+    "store": "0.x"
   },
-  "dependencies": {},
-  "registries": [
-    "smartcheckout"
-  ],
+  "dependencies": {
+    "vtex.product-summary-context": "0.x"
+  },
+  "registries": ["smartcheckout"],
   "policies": [],
   "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
 }
