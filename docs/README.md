@@ -1,91 +1,130 @@
-📢 Use this project, [contribute](https://github.com/{OrganizationName}/{AppName}) to it or open issues to help evolve it using [Store Discussion](https://github.com/vtex-apps/store-discussion).
+📢 Use this project, [contribute](https://github.com/vtex-apps/sponsored-products) to it or open issues to help evolve it using [Store Discussion](https://github.com/vtex-apps/store-discussion).
 
-# APP NAME
+# Sponsored Products
 
 <!-- DOCS-IGNORE:start -->
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-0-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <!-- DOCS-IGNORE:end -->
 
-Under the app's name, you should explain the topic, giving a **brief description** of its **functionality** in a store when installed.
+VTEX Sponsored Products is responsible for implementing the necessary frontend apps to properly render the sponsored products.
 
-Next, **add media** (either an image of a GIF) with the rendered components, so that users can better understand how the app works in practice. 
+:warning: Keep in mind that this app alone **will not** request the sponsored products; it will only add the "Sponsored" badge and add the Analytics wrapper.
 
-![Media Placeholder](https://user-images.githubusercontent.com/52087100/71204177-42ca4f80-227e-11ea-89e6-e92e65370c69.png)
+![Media Placeholder](https://github.com/vtex-apps/sponsored-products/assets/15937541/576a2021-0d90-47b7-a6fc-bb60f231cca2)
 
-## Configuration 
+## Configuration
 
-In this section, you first must **add the primary instructions** that will allow users to use the app's blocks in their store, such as:
+### Step 1: Adding the Sponsored Products app to your theme's dependency
 
-1. Adding the app as a theme dependency in the `manifest.json` file;
-2. Declaring the app's main block in a given theme template or inside another block from the theme.
+In your theme's `manifest.json`, add the Sponsored Products app as a dependency:
 
-Remember to add a table with all blocks exported by the app and their descriptions. You can verify an example of it on the [Search Result documentation](https://vtex.io/docs/components/all/vtex.search-result@3.56.1/). 
+```json
+  "dependencies": {
+    "vtex.sponsored-products": "0.x"
+  }
+```
 
-Next, add the **props table** containing your block's props. 
+Now, you are able to use all the blocks exported by the `sponsored-products` app. Check out the full list below:
 
-If the app exports more than one block, create several tables - one for each block. For example:
+#### `sponsored-products` blocks
 
-### `block-1` props
+| Block name        | Description                                                                                                    |
+| ----------------- | -------------------------------------------------------------------------------------------------------------- |
+| `sponsored-badge` | Renders the "Sponsored" badge in your Product Summary. You can customize its CSS however fits best your store. |
+| `ads-analytics`   | Necessary for observing impression and click metrics to assess the performance of the campaigns                |
 
-| Prop name    | Type            | Description    | Default value                                                                                                                               |
-| ------------ | --------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | 
-| `XXXXX`      | `XXXXXX`       | XXXXXXXX         | `XXXXXX`        |
+### Step 2: Using the Sponsored Products blocks
 
+#### The sponsored badge
 
-### `block-2` props
+This is fairly straightforward: simply call it as a child block on you Product Summary shelf. For example:
 
-| Prop name    | Type            | Description    | Default value                                                                                                                               |
-| ------------ | --------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | 
-| `XXXXX`      | `XXXXXX`       | XXXXXXXX         | `XXXXXX`        |
+```diff
+"product-summary.shelf": {
+    "children": [
+        "stack-layout#prodsum",
+        "product-summary-space",
++       "sponsored-badge",
+        "product-summary-name",
+        "flex-layout.col#productRating",
+        "product-summary-space",
+        "product-list-price#summary",
+        "flex-layout.row#selling-price-savings",
+        "product-installments#summary",
+        "add-to-cart-button"
+    ]
+},
+```
 
-Prop types are: 
+They can also be added anywhere where a product is in context. For instance, in a product carrousel.
 
-- `string` 
-- `enum` 
-- `number` 
-- `boolean` 
-- `object` 
-- `array` 
+#### The Ads Analytics wrapper
 
-When documenting a prop whose type is `object` or `array` another prop table will be needed. You can create it following the example below:
+For this one, you'll need to use the Ads Analytics directly as children of your Gallery block. For instance:
 
-- `propName` object:
+```diff
+"gallery": {
+    "props": {
+        "layouts": [
+            {
+                "name": "grid",
+                "component": "GridSummary",
+                "itemsPerRow": {
+                    "(min-width:1300px)": 4,
+                    "desktop": 3,
+                    "tablet": 3,
+                    "phone": 2
+                }
+            },
+            {
+                "name": "list",
+                "component": "ListSummary",
+                "itemsPerRow": 1
+            }
+        ],
++       "ListSummary": "ads-analytics#listLayout",
++       "GridSummary": "ads-analytics"
+    }
+},
 
-| Prop name    | Type            | Description    | Default value                                                                                                                               |
-| ------------ | --------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | 
-| `XXXXX`      | `XXXXXX`       | XXXXXXXX         | `XXXXXX`        |
++ "ads-analytics": {
++   "props": {
++       "ProductSummary": "product-summary.shelf"
++   }
++ },
 
++ "ads-analytics#listLayout": {
++   "props": {
++   "ProductSummary": "product-summary.shelf#listLayout"
++   }
++ },
 
-Remember to also use this Configuration section to  **showcase any necessary disclaimer** related to the app and its blocks, such as the different behavior it may display during its configuration. 
+```
 
-## Modus Operandi *(not mandatory)*
+## Blocks
 
-There are scenarios in which an app can behave differently in a store, according to how it was added to the catalog, for example. It's crucial to go through these **behavioral changes** in this section, allowing users to fully understand the **practical application** of the app in their store.
+### `sponsored-badge`
 
-If you feel compelled to give further details about the app, such as it's **relationship with the VTEX admin**, don't hesitate to use this section. 
+No props are necessary, this component is able to access the current product via context automatically.
+
+### `ads-analytics`
+
+| Prop name        | Type     | Description                                 | Default value |
+| ---------------- | -------- | ------------------------------------------- | ------------- |
+| `ProductSummary` | `string` | The component used for the Product Summary. | `undefined`   |
 
 ## Customization
 
-The first thing that should be present in this section is the sentence below, showing users the recipe pertaining to CSS customization in apps:
+In order to apply CSS customizations in this and other blocks, follow the instructions given in the recipe on [Using CSS Handles for store customization](https://vtex.io/docs/recipes/style/using-css-handles-for-store-customization).
 
-`In order to apply CSS customizations in this and other blocks, follow the instructions given in the recipe on [Using CSS Handles for store customization](https://vtex.io/docs/recipes/style/using-css-handles-for-store-customization).`
-
-Thereafter, you should add a single column table with the available CSS handles for the app, like the one below. Note that the Handles must be ordered alphabetically.
-
-| CSS Handles |
-| ----------- | 
-| `XXXXX` | 
-| `XXXXX` | 
-| `XXXXX` | 
-| `XXXXX` | 
-| `XXXXX` |
-
-
-If there are none, add the following sentence instead:
-
-`No CSS Handles are available yet for the app customization.`
+| CSS Handles      |
+| ---------------- |
+| `badgeContainer` |
+| `badgeText`      |
 
 <!-- DOCS-IGNORE:start -->
 
@@ -98,17 +137,9 @@ Thanks goes to these wonderful people:
 <!-- markdownlint-disable -->
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind are welcome!
 
 <!-- DOCS-IGNORE:end -->
-
----- 
-
-Check out some documentation models that are already live: 
-- [Breadcrumb](https://github.com/vtex-apps/breadcrumb)
-- [Image](https://vtex.io/docs/components/general/vtex.store-components/image)
-- [Condition Layout](https://vtex.io/docs/components/all/vtex.condition-layout@1.1.6/)
-- [Add To Cart Button](https://vtex.io/docs/components/content-blocks/vtex.add-to-cart-button@0.9.0/)
-- [Store Form](https://vtex.io/docs/components/all/vtex.store-form@0.3.4/)
