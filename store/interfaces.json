@@ -1,4 +1,7 @@
 {
+  "sponsored-badge": {
+    "component": "SponsoredBadge"
+  },
   "ads-analytics": {
     "component": "AdsAnalytics"
   }
