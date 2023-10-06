@@ -14,4 +14,4 @@
 **/__tests__
 **/__mocks__
 **/*.test.*
-react/testUtils/**
+**/__testUtils__/**
