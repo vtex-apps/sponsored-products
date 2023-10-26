@@ -1,7 +1,11 @@
 import '@testing-library/jest-dom'
 import { render } from '@vtex/test-tools/react'
 import React from 'react'
-import { Product } from 'vtex.product-summary-context/react/ProductSummaryTypes'
+import { ProductSummaryContext } from 'vtex.product-summary-context'
+import {
+  Product,
+  State,
+} from 'vtex.product-summary-context/react/ProductSummaryTypes'
 
 import ProductFactory from '../../../__testUtils__/factories/product'
 import { AdsAnalytics } from '../AdsAnalytics'
@@ -11,11 +15,21 @@ const MockProductSummary = () => <div data-testid={testId}>ProductSummary</div>
 
 const position = 1
 
-const setupTest = (product: Product) => {
+type Options = {
+  fromContext?: boolean
+}
+
+const setupTest = (product: Product, { fromContext }: Options = {}) => {
+  jest
+    .spyOn(ProductSummaryContext, 'useProductSummary')
+    .mockImplementation(() => ({ product } as State))
+
+  const propProduct = fromContext ? undefined : product
+
   return render(
     <AdsAnalytics
       ProductSummary={MockProductSummary}
-      product={product}
+      product={propProduct}
       position={position}
     />
   )
@@ -70,6 +84,16 @@ describe('<AdsAnalytics />', () => {
       const { queryByTestId } = setupTest(product)
 
       expect(queryByTestId('ads-analytics')).not.toBeInTheDocument()
+    })
+  })
+
+  describe('when the product is not passed as prop', () => {
+    const product = ProductFactory.build() as Product
+
+    it('should get the product from the context', () => {
+      const { getByTestId } = setupTest(product, { fromContext: true })
+
+      expect(getByTestId(testId)).toBeInTheDocument()
     })
   })
 })

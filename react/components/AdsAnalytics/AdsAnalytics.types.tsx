@@ -1,8 +1,8 @@
 import { ProductSummaryTypes } from 'vtex.product-summary-context'
 
 type ProductSummaryProps = {
-  product: ProductSummaryTypes.Product
-  position: number
+  product?: ProductSummaryTypes.Product
+  position?: number
   [x: string]: unknown
 }
 
@@ -13,7 +13,7 @@ export type AdsAnalyticsProps = {
 export type DataProperties = {
   'data-van-prod-id': string
   'data-van-prod-name': string
-  'data-van-position': number
+  'data-van-position': Nullable<number>
   'data-van-aid': string
   'data-van-cid': string
   'data-van-req-id': string

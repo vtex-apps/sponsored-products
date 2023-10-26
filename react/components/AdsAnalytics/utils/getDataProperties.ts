@@ -5,7 +5,7 @@ import { DataProperties } from '../AdsAnalytics.types'
 
 type GetDataPropertiesArgs = {
   product: Product
-  position: number
+  position?: number
 }
 
 const getDataProperties = ({
