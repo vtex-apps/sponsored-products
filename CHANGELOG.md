@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Adds the class `adsAnalyticsContainer` to `<AdsAnalytics />` so that it can be styled in the store-theme.
+
 ## [0.1.0] - 2023-10-06
 
 ### Added
