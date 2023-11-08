@@ -1,7 +1,7 @@
 {
   "vendor": "vtex",
   "name": "sponsored-products",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "title": "VTEX Sponsored Products",
   "description": "Frontend apps that configure VTEX Ads in your storefront.",
   "builders": {
@@ -14,9 +14,7 @@
     "vtex.css-handles": "1.x",
     "vtex.product-summary-context": "0.x"
   },
-  "registries": [
-    "smartcheckout"
-  ],
+  "registries": ["smartcheckout"],
   "policies": [],
   "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
 }
